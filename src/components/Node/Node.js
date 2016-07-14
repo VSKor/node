@@ -41,12 +41,20 @@ class Node {
     return Object.assign(node, props);
   }
 
-  append(someNode) {
-    var nid = NodeX.Nodes.indexOf(someNode) || NodeX.DOMNodes.indexOf(someNode);
-    if(nid === -1){
-      nid = new Node(someNode).nid;
+  append(appendNode, callback) {
+    var nid = NodeX.Nodes.indexOf(appendNode) || NodeX.DOMNodes.indexOf(appendNode);
+    if (nid === -1) {
+      var newNode = new Node(appendNode);
+      nid = newNode.nid;
     }
+    let appendedNode = newNode || NodeX.Nodes[nid];
     NodeX.DOMNodes[this.nid].appendChild(NodeX.DOMNodes[nid]);
+
+
+    if(callback){
+      callback.call(this, appendedNode);
+    }
+    return appendedNode;
   }
 }
 
